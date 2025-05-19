@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import router from "@src/routes";
 
 let app = express();
 
@@ -9,5 +10,6 @@ app.use(
     origin: "*",
   }),
 );
+app.use("/", router);
 
 export default app;
