@@ -19,4 +19,20 @@ router.get("/historicalTrades", async function (req: Request, res: Response) {
   }
 });
 
+router.get("/analyze", async function (req: Request, res: Response) {
+  try {
+    const { symbol, from, to } = req.query as unknown as {
+      symbol: string;
+      from: string;
+      to: string;
+    };
+
+    const data = await binanceService.analyze(symbol, from, to);
+
+    res.status(200).json({ data: data });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
 export default router;

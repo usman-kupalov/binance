@@ -2,6 +2,7 @@ import "@utils/env";
 import axios, { AxiosInstance } from "axios";
 import * as process from "node:process";
 import { HistoricalTrades } from "@src/types";
+import moment from "moment";
 
 class BinanceService {
   private api: AxiosInstance;
@@ -15,7 +16,7 @@ class BinanceService {
 
   async getHistoricalTrades(
     symbol: string,
-    limit = 5,
+    limit = 100,
   ): Promise<HistoricalTrades[]> {
     try {
       const response = await this.api.get("/historicalTrades", {
@@ -26,6 +27,23 @@ class BinanceService {
     } catch (error) {
       throw new Error(`Failed to fetch data ${error.message}`);
     }
+  }
+
+  async analyze(symbol: string, from: string, to: string) {
+    const fromDate = moment(from).toDate().getTime();
+    const toDate = moment(to).toDate().getTime();
+
+    console.log(fromDate, toDate);
+    const data = (await this.getHistoricalTrades(symbol))
+      .filter((trade) => trade.time >= fromDate && trade.time <= toDate)
+      .sort((a, b) => a.time - b.time);
+    const latestPrice = data[data.length - 1]?.price;
+    const oldestPrice = data[0]?.price;
+
+    return {
+      latestPrice: latestPrice || 0,
+      oldestPrice: oldestPrice || 0,
+    };
   }
 }
 
