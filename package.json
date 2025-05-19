@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:start": "",
-    "build": "",
-    "start": ""
+    "dev:start": "nodemon --config nodemon.web.json ./src/index.ts",
+    "build": "tsc --build tsconfig.json",
+    "start": "node -r build/index.js"
   },
   "author": "Usmon",
   "license": "ISC",
