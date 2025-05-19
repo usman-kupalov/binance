@@ -29,12 +29,11 @@ class BinanceService {
     }
   }
 
-  async analyze(symbol: string, from: string, to: string) {
+  async analyze(trades: HistoricalTrades[], from: string, to: string) {
     const fromDate = moment(from).toDate().getTime();
     const toDate = moment(to).toDate().getTime();
 
-    console.log(fromDate, toDate);
-    const data = (await this.getHistoricalTrades(symbol))
+    const data = trades
       .filter((trade) => trade.time >= fromDate && trade.time <= toDate)
       .sort((a, b) => a.time - b.time);
     const latestPrice = data[data.length - 1]?.price;

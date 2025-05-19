@@ -27,7 +27,8 @@ router.get("/analyze", async function (req: Request, res: Response) {
       to: string;
     };
 
-    const data = await binanceService.analyze(symbol, from, to);
+    const trades = await binanceService.getHistoricalTrades(symbol);
+    const data = await binanceService.analyze(trades, from, to);
 
     res.status(200).json({ data: data });
   } catch (error) {
